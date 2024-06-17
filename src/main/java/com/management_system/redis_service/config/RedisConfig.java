@@ -1,6 +1,6 @@
 package com.management_system.redis_service.config;
 
-import com.google.api.client.util.Value;
+import com.management_system.redis_service.constant.RedisConstantValue;
 import com.management_system.redis_service.core.RedisData;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,16 +15,12 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
-    @Value("${spring.redis.host}")
-    private String redisHost;
-
-    @Value("${spring.redis.port}")
-    private int redisPort;
-
     // Redis client standalone connection
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisHost, redisPort));
+        return new LettuceConnectionFactory(
+                new RedisStandaloneConfiguration(RedisConstantValue.REDIS_HOST_NAME, RedisConstantValue.REDIS_PORT)
+        );
     }
 
 

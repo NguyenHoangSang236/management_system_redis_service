@@ -70,7 +70,7 @@ public class RedisService {
             else {
                 ObjectMapper objectMapper = new ObjectMapper();
                 T resultData = objectMapper.convertValue(data, classType);
-                Map<String, Object> resMap = objectMapper.convertValue(resultData, new TypeReference<Map<String, Object>>() {});
+                Map<String, RedisData> resMap = objectMapper.convertValue(resultData, new TypeReference<Map<String, RedisData>>() {});
 
                 loggingService.log(ActionType.SEARCH, hashKey, id, null, resMap, null);
 
@@ -88,10 +88,12 @@ public class RedisService {
 
     public void delete(String id, String hashKey) {
         hashOperations.delete(hashKey, id);
+        loggingService.log(ActionType.DELETE, hashKey, id, null, null, "Deleted " + id + " of hash key " + hashKey);
     }
 
 
     public void deleteAll() {
         Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().commands().flushDb();
+        loggingService.log(ActionType.DELETE, null, null, null, null, "Deleted all data");
     }
 }

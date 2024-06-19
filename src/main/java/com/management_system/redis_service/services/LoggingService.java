@@ -4,16 +4,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management_system.redis_service.constant.ActionType;
 import com.management_system.redis_service.core.RedisData;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
 
+@Component
 public class LoggingService {
     public <T extends RedisData> void log(ActionType type,
                                                       String hashKey,
                                                       String id,
                                                       T data,
-                                                      Map<String, Object> resultMap, String message) {
+                                                      Map<String, RedisData> resultMap, String message) {
         StringBuilder builder = new StringBuilder();
         ObjectMapper objectMapper = new ObjectMapper();
         Date date = new Date();

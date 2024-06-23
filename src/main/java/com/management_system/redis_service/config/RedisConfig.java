@@ -1,7 +1,7 @@
 package com.management_system.redis_service.config;
 
 import com.management_system.redis_service.constant.RedisConstantValue;
-import com.management_system.redis_service.core.RedisData;
+import com.management_system.utilities.core.redis.RedisData;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -12,6 +12,8 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.Map;
 
 @Configuration
 public class RedisConfig {
@@ -31,8 +33,8 @@ public class RedisConfig {
     // - Hash value is serialized as String
     @Bean
     @Primary
-    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<Object, Object> template = new RedisTemplate<>();
+    public RedisTemplate<String, Map<String, Object>> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Map<String, Object>> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
@@ -43,7 +45,7 @@ public class RedisConfig {
 
 
     @Bean
-    public HashOperations<Object, String, RedisData> hashOperations(RedisTemplate<Object, Object> redisTemplate) {
+    public HashOperations<String, String, Object> hashOperations(RedisTemplate<String, Map<String, Object>> redisTemplate) {
         return redisTemplate.opsForHash();
     }
 }

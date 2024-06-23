@@ -3,13 +3,14 @@ package com.management_system.redis_service.services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management_system.redis_service.constant.ActionType;
-import com.management_system.redis_service.core.RedisData;
+import com.management_system.utilities.core.redis.RedisData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,80 +21,48 @@ public class RedisService {
     LoggingService loggingService;
 
     @Autowired
-    RedisTemplate<Object, Object> redisTemplate;
+    RedisTemplate<String, Map<String, Object>> redisTemplate;
 
-    HashOperations<Object, String, RedisData> hashOperations;
+    HashOperations<String, String, Object> hashOperations;
 
 
     @Autowired
-    public RedisService(RedisTemplate<Object, Object> redisTemplate) {
+    public RedisService(RedisTemplate<String, Map<String, Object>> redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
     }
 
 
-    public <T extends RedisData> void save(T data, String hashKey) {
+    public void save(String key, Map<String, Object> hashData) {
         try {
-            hashOperations.put(hashKey, data.getId(), data);
-            loggingService.log(ActionType.SAVE, hashKey, null, data, null, "Saved data to Redis successfully");
+            hashOperations.putAll(key, hashData);
         }
         catch (Exception e) {
             e.printStackTrace();
-            loggingService.log(ActionType.SAVE, hashKey, null, data, null, e.getMessage());
         }
     }
 
 
-    public Map<String, RedisData> findAll(String hashKey) {
+    public Map<String, Object> findByKey(String key) {
         try {
-            Map<String, RedisData> resultMap = hashOperations.entries(hashKey);
-            loggingService.log(ActionType.SEARCH, hashKey, null, null, resultMap, null);
+            Map<String, Object> resultMap = hashOperations.entries(key);
 
             return resultMap;
         }
         catch (Exception e) {
             e.printStackTrace();
-            loggingService.log(ActionType.SAVE, hashKey, null, null, null, e.getMessage());
 
             return null;
         }
     }
 
 
-    public <T extends RedisData> T findById(String id, String hashKey, Class<T> classType) {
-        try {
-            RedisData data = hashOperations.get(hashKey, id);
-
-            if(data == null) {
-                return null;
-            }
-            else {
-                ObjectMapper objectMapper = new ObjectMapper();
-                T resultData = objectMapper.convertValue(data, classType);
-                Map<String, RedisData> resMap = objectMapper.convertValue(resultData, new TypeReference<Map<String, RedisData>>() {});
-
-                loggingService.log(ActionType.SEARCH, hashKey, id, null, resMap, null);
-
-                return resultData;
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            loggingService.log(ActionType.SEARCH, hashKey, id, null, null, e.getMessage());
-
-            return null;
-        }
+    public void delete(String key) {
+        redisTemplate.delete(key);
     }
 
 
-    public void delete(String id, String hashKey) {
-        hashOperations.delete(hashKey, id);
-        loggingService.log(ActionType.DELETE, hashKey, id, null, null, "Deleted " + id + " of hash key " + hashKey);
-    }
-
-
-    public void deleteAll() {
+    public void cleanDatabase() {
         Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().commands().flushDb();
-        loggingService.log(ActionType.DELETE, null, null, null, null, "Deleted all data");
     }
 }

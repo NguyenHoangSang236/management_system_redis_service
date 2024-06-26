@@ -62,8 +62,15 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<!--Add this to make this project usable when getting imported by other projects-->
 				<configuration>
-					<classifier>exec</classifier>
+					<mainClass>com.management_system.redis_service.RedisServiceApplication</mainClass>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

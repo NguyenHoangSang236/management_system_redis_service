@@ -53,7 +53,4 @@ fi
 docker rm -f redis-service-container
 docker build -t redis-service-container .
 docker run -p8079:8079 --name redis-service-container redis-service-container
-
-# Xóa các file chia tách
-rm -r splited-app-*
 EOF

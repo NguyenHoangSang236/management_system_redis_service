@@ -51,6 +51,6 @@ fi
 
 # Xóa container cũ, build và run container mới
 docker rm -f redis-service-container
-docker build -t redis-service-container .
-docker run -p8079:8079 --name redis-service-container redis-service-container
+docker build -t redis-service-image .
+docker run -p8079:8079 --name redis-service-container redis-service-image
 EOF

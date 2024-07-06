@@ -35,7 +35,7 @@ fi
 mkdir -p target
 
 # Xoá JAR file
-rm /target/redis_service-0.0.1-SNAPSHOT.jar
+rm target/redis_service-0.0.1-SNAPSHOT.jar
 
 # Hợp lại các file chia tách thành file JAR
 cat splited-app-* > target/redis_service-0.0.1-SNAPSHOT.jar

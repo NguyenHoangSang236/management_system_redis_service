@@ -46,7 +46,7 @@ fi
 # Xóa container cũ, build và run container mới
 docker rm -f redis-service-container
 docker build -t redis-service-container .
-docker run -p8079:8079 redis_service_container
+docker run -p8079:8079 redis-service-container
 
 # Xóa các file chia tách
 rm -r splited-app-*

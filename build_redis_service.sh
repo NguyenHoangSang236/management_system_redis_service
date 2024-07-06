@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Xoá file JAR trước khi build
+rm target/redis_service-0.0.1-SNAPSHOT.jar
+
 # Build project và tạo file JAR
 ./mvnw clean install
 
@@ -31,11 +34,11 @@ if [ ! -f splited-app-aa ]; then
   exit 1
 fi
 
-# Tạo thư mục target nếu chưa tồn tại
-mkdir -p target
-
 # Xoá JAR file
 rm target/redis_service-0.0.1-SNAPSHOT.jar
+
+# Tạo thư mục target nếu chưa tồn tại
+mkdir -p target
 
 # Hợp lại các file chia tách thành file JAR
 cat splited-app-* > target/redis_service-0.0.1-SNAPSHOT.jar

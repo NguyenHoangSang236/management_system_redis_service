@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -36,6 +37,7 @@ public class RedisService {
     public void save(String key, Map<String, Object> hashData) {
         try {
             hashOperations.putAll(key, hashData);
+            redisTemplate.expire(key, 12, TimeUnit.DAYS);
         }
         catch (Exception e) {
             e.printStackTrace();

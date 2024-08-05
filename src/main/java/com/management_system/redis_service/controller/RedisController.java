@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management_system.redis_service.services.RedisService;
 import com.management_system.utilities.constant.enumuration.FilterType;
 import com.management_system.utilities.core.redis.RedisRequest;
-import com.management_system.utilities.entities.ApiResponse;
+import com.management_system.utilities.entities.api.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,21 +28,19 @@ public class RedisController {
         FilterType type = request.getType();
         Map<String, Object> data = request.getData();
 
-        if(data == null) {
+        if (data == null) {
             return ApiResponse.builder()
                     .result("failed")
                     .content("Request does not have 'data' field")
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
-        }
-        else if (data.get("id") == null) {
+        } else if (data.get("id") == null) {
             return ApiResponse.builder()
                     .result("failed")
                     .content("Data does not have 'id' field")
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
-        }
-        else if (type == null) {
+        } else if (type == null) {
             return ApiResponse.builder()
                     .result("failed")
                     .content("Request does not have 'type' field")
@@ -66,14 +64,13 @@ public class RedisController {
     public ApiResponse findByKey(@PathVariable(value = "key") String key) throws JsonProcessingException {
         Map<String, Object> result = redisService.findByKey(key);
 
-        if(result == null || result.keySet().isEmpty()) {
+        if (result == null || result.keySet().isEmpty()) {
             return ApiResponse.builder()
                     .result("failed")
                     .content("No data!")
                     .status(HttpStatus.NO_CONTENT)
                     .build();
-        }
-        else {
+        } else {
             return ApiResponse.builder()
                     .result("success")
                     .content(result)

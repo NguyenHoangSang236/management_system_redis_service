@@ -1,7 +1,6 @@
 package com.management_system.redis_service.config;
 
 import com.management_system.redis_service.constant.RedisConstantValue;
-import com.management_system.utilities.core.redis.RedisData;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

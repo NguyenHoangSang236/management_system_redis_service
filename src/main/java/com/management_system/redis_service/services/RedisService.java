@@ -1,16 +1,12 @@
 package com.management_system.redis_service.services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.management_system.redis_service.constant.ActionType;
-import com.management_system.utilities.core.redis.RedisData;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -38,8 +34,7 @@ public class RedisService {
         try {
             hashOperations.putAll(key, hashData);
             redisTemplate.expire(key, 12, TimeUnit.DAYS);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -50,8 +45,7 @@ public class RedisService {
             Map<String, Object> resultMap = hashOperations.entries(key);
 
             return resultMap;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
             return null;
@@ -66,5 +60,12 @@ public class RedisService {
 
     public void cleanDatabase() {
         Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().commands().flushDb();
+    }
+
+
+    @PostConstruct
+    public void init() {
+        cleanDatabase();
+        log.info("Redis database cleaned at startup.");
     }
 }

@@ -31,19 +31,19 @@ public class RedisController {
         if (data == null) {
             return ApiResponse.builder()
                     .result("failed")
-                    .content("Request does not have 'data' field")
+                    .message("Request does not have 'data' field")
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         } else if (data.get("id") == null) {
             return ApiResponse.builder()
                     .result("failed")
-                    .content("Data does not have 'id' field")
+                    .message("Data does not have 'id' field")
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         } else if (type == null) {
             return ApiResponse.builder()
                     .result("failed")
-                    .content("Request does not have 'type' field")
+                    .message("Request does not have 'type' field")
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
@@ -67,12 +67,13 @@ public class RedisController {
         if (result == null || result.keySet().isEmpty()) {
             return ApiResponse.builder()
                     .result("failed")
-                    .content("No data!")
+                    .message("No data!")
                     .status(HttpStatus.NO_CONTENT)
                     .build();
         } else {
             return ApiResponse.builder()
                     .result("success")
+                    .message("Get data by key successfully")
                     .content(result)
                     .status(HttpStatus.OK)
                     .build();
@@ -86,7 +87,7 @@ public class RedisController {
 
         return ApiResponse.builder()
                 .result("success")
-                .content("Delete successfully")
+                .message("Delete successfully")
                 .status(HttpStatus.OK)
                 .build();
     }
@@ -98,7 +99,7 @@ public class RedisController {
 
         return ApiResponse.builder()
                 .result("success")
-                .content("Clean database successfully")
+                .message("Clean database successfully")
                 .status(HttpStatus.OK)
                 .build();
     }

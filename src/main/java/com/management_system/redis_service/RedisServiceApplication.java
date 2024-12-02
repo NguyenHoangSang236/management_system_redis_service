@@ -23,7 +23,7 @@ import org.springframework.context.annotation.ComponentScan;
         "com.management_system.redis_service.services",
         "com.management_system.utilities",
 })
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 public class RedisServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(RedisServiceApplication.class, args);

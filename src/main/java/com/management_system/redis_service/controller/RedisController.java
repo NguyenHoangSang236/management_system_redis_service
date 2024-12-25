@@ -3,7 +3,7 @@ package com.management_system.redis_service.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management_system.redis_service.services.RedisService;
-import com.management_system.utilities.constant.enumuration.FilterType;
+import com.management_system.utilities.constant.enumuration.TableName;
 import com.management_system.utilities.core.redis.RedisRequest;
 import com.management_system.utilities.entities.api.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class RedisController {
         ObjectMapper objectMapper = new ObjectMapper();
 
         RedisRequest request = objectMapper.readValue(json, RedisRequest.class);
-        FilterType type = request.getType();
+        TableName type = request.getType();
         Map<String, Object> data = request.getData();
 
         if (data == null) {
@@ -60,8 +60,12 @@ public class RedisController {
     }
 
 
-    @GetMapping("/findByKey-{key}")
-    public ApiResponse findByKey(@PathVariable(value = "key") String key) throws JsonProcessingException {
+    @GetMapping("/find")
+    public ApiResponse findByKey(
+            @RequestParam(value = "table") TableName tableName,
+            @RequestParam(value = "id") String id
+    ) {
+        String key =  redisService.generateKey(tableName, id);
         Map<String, Object> result = redisService.findByKey(key);
 
         if (result == null || result.keySet().isEmpty()) {
@@ -81,8 +85,12 @@ public class RedisController {
     }
 
 
-    @GetMapping("/deleteByKey-{key}")
-    public ApiResponse deleteByKey(@PathVariable(value = "key") String key) throws JsonProcessingException {
+    @GetMapping("/delete")
+    public ApiResponse deleteByKey(
+            @RequestParam(value = "table") TableName tableName,
+            @RequestParam(value = "id") String id
+    ) {
+        String key =  redisService.generateKey(tableName, id);
         redisService.delete(key);
 
         return ApiResponse.builder()

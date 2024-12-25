@@ -1,5 +1,6 @@
 package com.management_system.redis_service.services;
 
+import com.management_system.utilities.constant.enumuration.TableName;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 public class RedisService {
-    @Autowired
-    LoggingService loggingService;
-
     @Autowired
     RedisTemplate<String, Map<String, Object>> redisTemplate;
 
@@ -60,6 +58,10 @@ public class RedisService {
 
     public void cleanDatabase() {
         Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().commands().flushDb();
+    }
+
+    public String generateKey(TableName table, String id) {
+        return table.name() + ":" + id;
     }
 
 

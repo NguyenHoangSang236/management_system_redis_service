@@ -31,7 +31,7 @@ public class WebServerConfig implements WebServerFactoryCustomizer<TomcatServlet
 //        server.setSsl(ssl);
         server.setSsl(null);
         server.setHttp2(http2);
-        server.setContextPath("/redis");
+        server.setContextPath("/api/redis");
         server.setPort(Integer.parseInt(credentialsUtils.getCredentials(SystemConfigKeyName.REDIS_SERVICE_SERVER_PORT).trim()));
     }
 }
